@@ -235,7 +235,7 @@ class _HospitalPatientDetailsState extends State<HospitalPatientDetails> {
       _hospitalpatientKey.currentState!.save();
       hospitalpatient();
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('OKAY')));
+          .showSnackBar(SnackBar(content: Text('Patient Details Submitted')));
       // Navigator.push(
       //     context, MaterialPageRoute(builder: (context) => SearchHospital()));
     }
@@ -243,25 +243,25 @@ class _HospitalPatientDetailsState extends State<HospitalPatientDetails> {
   
 
  Future<dynamic> hospitalpatient() async {
-    var headers = {'Content-Type': 'application/json'};
+    var headers = {
+      'Content-Type': 'application/json',
+     'Cookie': 'access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJOb29iQ29kZXIiLCJzdWIiOiI2MGM3NTBmZWZhYjk1ZDAwMTU1NTM4ZTciLCJpYXQiOjE2MjM4NDU1ODcsImV4cCI6MTYyMzg0OTE4N30.l_8sYqlAVMtykFQPZkZeEXXby92jeT6YSj-ScwZpOLc'
+    };
     var request = http.Request(
         'POST',
         Uri.parse(
             'https://covid-dash-combined.herokuapp.com/hospital/stats/patientdetails'));
     request.body =
-        '''{"username":"${_usernamecontroller.text}","Patient_Name":"${_patientNamecontroller.text}","Patient_Id":"${_patientIDcontroller.text}","Age":"${_patientAgecontroller.text}","Adhar_Number":"${_aadharcontroller.text}","Date_of_admission":"${_dischargeDatecontroller.text}","Admission_detail":"${_admissionDetailscontroller.text}","Discharge_Date":"${_dischargeDatecontroller.text}","Patient_Status":"${_patientStatuscontroller.text}"}''';
+        '''{\r\n"username": "${_usernamecontroller.text}",\r\n    "Patient_Name": "${_patientNamecontroller.text}",\r\n    "Patient_Id": ${int.parse(_patientIDcontroller.text)},\r\n    "Age": ${int.parse(_patientAgecontroller.text)},\r\n    "Adhar_Number": ${int.parse(_aadharcontroller.text)},\r\n    "Date_of_admission": "${_admissionDatecontroller.text}",\r\n    "Admission_detail": "${_admissionDetailscontroller.text}",\r\n    "Discharge_Date": "${_dischargeDatecontroller.text}",\r\n   "Patient_Status": "${_patientStatuscontroller.text}"\r\n}''';
     request.headers.addAll(headers);
     print(request.body);
     http.StreamedResponse response = await request.send();
 
-    if (response.statusCode == 200) {
-      String res = await response.stream.bytesToString();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(res)));
-      if (res == "Submitted") {
-      //  Navigator.push(
-         //   context, MaterialPageRoute(builder: (context) => HospitalBasicDetails()));
-      }
+   if (response.statusCode == 201) {
+      print("yes");
+      print(await response.stream.bytesToString());
     } else {
+      print("no");
       print(response.reasonPhrase);
     }
   }

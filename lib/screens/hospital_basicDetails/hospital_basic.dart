@@ -206,7 +206,7 @@ class _HospitalBasicDetailsState extends State<HospitalBasicDetails> {
       _publicSignUpKey.currentState!.save();
       hospitalbasic();
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('OKAY')));
+          .showSnackBar(SnackBar(content: Text('Details Submitted')));
       // Navigator.push(
       //     context, MaterialPageRoute(builder: (context) => SearchHospital()));
     }
@@ -223,7 +223,7 @@ class _HospitalBasicDetailsState extends State<HospitalBasicDetails> {
         Uri.parse(
             'https://covid-dash-combined.herokuapp.com/hospital/stats/basicdetails'));
     request.body =
-        '''{\r\n"username": "niket1234",\r\n    "Total_Patients": 1230,\r\n    "Total_Beds": 2,\r\n    "Occupied_Beds": 1224,\r\n    "Empty_Beds": 1,\r\n    "Oxygen_Availability ": 1009,\r\n    "Medicine_Status": "Remedsvir-1100, Covaxin-2200"\r\n}''';
+        '''{\r\n"username": "${_usernamecontroller.text}",\r\n    "Total_Patients": ${int.parse(_totalPatientcontroller.text)},\r\n    "Total_Beds": ${(int.parse(_totalBedscontroller.text))},\r\n    "Occupied_Beds": ${(_occupiedBedscontroller.text)},\r\n    "Empty_Beds": ${(_emptyBedscontroller.text)},\r\n    "Oxygen_Availability ": ${(_oxygencontroller.text)},\r\n    "Medicine_Status": "${_medicineStatuscontroller.text}"\r\n}''';
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
